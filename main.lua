@@ -1,11 +1,12 @@
+if getgenv().drawingextension then return end
+getgenv().drawingextension = true
+
 local Signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/vozoid/signal-library/main/main.lua"))()
 
 local inputService = game:GetService("UserInputService")
 local runService = game:GetService("RunService")
 
-local utility = {}
-
-function utility.mouse_over(obj)
+function mouse_over(obj)
     if obj.__OBJECT_EXISTS then
         local posX = obj.Position.X
         local posY = obj.Position.Y
@@ -50,19 +51,19 @@ Drawing.new = function(shape)
 
     inputService.InputBegan:connect(function(input)
         -- InputBegan
-        if utility.mouse_over(obj) then
+        if mouse_over(obj) then
             obj.InputBegan:Fire(input)
         end
 
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             --MouseButton1Click and MouseButton1Down and InputBegan
-            if utility.mouse_over(obj) then
+            if mouse_over(obj) then
                 obj.MouseButton1Click:Fire()
                 obj.MouseButton1Down:Fire()
             end
         elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
             --MouseButton2Click and MouseButton2Down
-            if utility.mouse_over(obj) then
+            if mouse_over(obj) then
                 obj.MouseButton2Click:Fire()
                 obj.MouseButton2Down:Fire()
             end
@@ -71,18 +72,18 @@ Drawing.new = function(shape)
 
     inputService.InputEnded:connect(function(input)
         -- InputEnded
-        if utility.mouse_over(obj) then
+        if mouse_over(obj) then
             obj.InputEnded:Fire(input)
         end
 
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             --MouseButton1Up
-            if utility.mouse_over(obj) then
+            if mouse_over(obj) then
                 obj.MouseButton1Up:Fire()
             end
         elseif input.UserInputType == Enum.UserInputType.MouseButton2 then
             -- MouseButton2Up
-            if utility.mouse_over(obj) then
+            if mouse_over(obj) then
                 obj.MouseButton2Up:Fire()
             end
         end
@@ -90,13 +91,13 @@ Drawing.new = function(shape)
 
     inputService.InputChanged:connect(function(input)
         if input.UserInputType ~= Enum.UserInputType.Keyboard and input.UserInputType ~= Enum.UserInputType.TextInput then
-            if utility.mouse_over(obj) then
+            if mouse_over(obj) then
                 obj.InputChanged:Fire(input)
             end
         end
 
         if input.UserInputType == Enum.UserInputType.MouseMovement then
-            if utility.mouse_over(obj) then
+            if mouse_over(obj) then
                 -- MouseMoved
                 obj.MouseMoved:Fire()
 
