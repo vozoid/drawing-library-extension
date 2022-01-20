@@ -138,82 +138,81 @@ Drawing.new = function(shape)
                 end
             end
         end)
-
-
-        -- Children and Descendants
-        local children = {}
-        local descendants = {}
-
-        rawset(obj, "GetChildren", function()
-            return children
-        end)
-
-        rawset(obj, "GetDescendants", function()
-            return descendants
-        end)
-
-        rawset(obj, "FindFirstChild", function(self, str)
-            for _, child in next, children do
-                if child.Name == str then
-                    return child
-                end
-            end
-        end)
-
-        -- __newindex hook
-        local index = {}
-        
-        local oldnewindex
-        oldnewindex = hookfunction(mt.__newindex, function(t, k, v)
-            -- Name
-            if k == "Name" then
-                rawset(t, k, v)
-            end
-            
-            -- Parents, Descendants and Children
-            if k == "Parent" then
-                if typeof(v) == "table" then
-                    table.insert(v:GetChildren(), t)
-
-                    local highestParent = v
-                    local lastHighestParent = highestParent
-
-                    repeat
-                        table.insert(lastHighestParent:GetDescendants(), t)
-
-                        highestParent = highestParent.Parent
-                        lastHighestParent = highestParent
-                    until
-                        typeof(highestParent) ~= "table"
-
-                    rawset(t, k, v)
-                else
-                    error("Invalid parent type: " .. typeof(v))
-                end
-            end
-
-            if k == "Position" then
-                rawset(t, "AbsolutePosition", v)
-            end
-
-            -- return drawing property (position, size, etc)
-            if not properties[k] then
-                oldnewindex(t, k, v)
-            end
-        end)
-
-        -- __index hook
-        local oldindex
-        oldindex = hookfunction(mt.__index, function(t, k, v)
-            if properties[k] then
-                -- return property
-                return rawget(t, k)
-            else
-                -- return drawing property (position, size, etc)
-                return oldindex(t, k, v)
-            end
-        end)
     end
+    
+    -- Children and Descendants
+    local children = {}
+    local descendants = {}
+
+    rawset(obj, "GetChildren", function()
+        return children
+    end)
+
+    rawset(obj, "GetDescendants", function()
+        return descendants
+    end)
+
+    rawset(obj, "FindFirstChild", function(self, str)
+        for _, child in next, children do
+            if child.Name == str then
+                return child
+            end
+        end
+    end)
+
+    -- __newindex hook
+    local index = {}
+    
+    local oldnewindex
+    oldnewindex = hookfunction(mt.__newindex, function(t, k, v)
+        -- Name
+        if k == "Name" then
+            rawset(t, k, v)
+        end
+        
+        -- Parents, Descendants and Children
+        if k == "Parent" then
+            if typeof(v) == "table" then
+                table.insert(v:GetChildren(), t)
+
+                local highestParent = v
+                local lastHighestParent = highestParent
+
+                repeat
+                    table.insert(lastHighestParent:GetDescendants(), t)
+
+                    highestParent = highestParent.Parent
+                    lastHighestParent = highestParent
+                until
+                    typeof(highestParent) ~= "table"
+
+                rawset(t, k, v)
+            else
+                error("Invalid parent type: " .. typeof(v))
+            end
+        end
+
+        if k == "Position" then
+            rawset(t, "AbsolutePosition", v)
+        end
+
+        -- return drawing property (position, size, etc)
+        if not properties[k] then
+            oldnewindex(t, k, v)
+        end
+    end)
+
+    -- __index hook
+    local oldindex
+    oldindex = hookfunction(mt.__index, function(t, k, v)
+        if properties[k] then
+            -- return property
+            return rawget(t, k)
+        else
+            -- return drawing property (position, size, etc)
+            return oldindex(t, k, v)
+        end
+    end)
 
     return obj
 end
