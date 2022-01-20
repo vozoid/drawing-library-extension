@@ -38,7 +38,7 @@ local properties = {
 
 local classes = {
     Square = "Square",
-    Line = "Text",
+    Text = "Text",
     Image = "Image"
 }
 
