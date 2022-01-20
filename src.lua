@@ -60,7 +60,9 @@ if not getgenv().drawingextension then
             MouseMoved = Signal.new(),
             InputBegan = Signal.new(),
             InputEnded = Signal.new(),
-            InputChanged = Signal.new()
+            InputChanged = Signal.new(),
+            ChildAdded = Signal.new(),
+            DescendantAdded = Signal.new()
         }
 
         local mouseEntered = false
@@ -184,12 +186,14 @@ if not getgenv().drawingextension then
             if k == "Parent" then
                 if typeof(v) == "table" then
                     table.insert(v:GetChildren(), t)
+                    v.DescendantAdded:Fire(t)
 
                     local highestParent = v
                     local lastHighestParent = highestParent
 
                     repeat
                         table.insert(lastHighestParent:GetDescendants(), t)
+                        lastHighestParent.DescendantAdded:Fire(t)
 
                         highestParent = highestParent.Parent
                         lastHighestParent = highestParent
