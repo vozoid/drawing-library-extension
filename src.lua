@@ -17,7 +17,7 @@ if not getgenv().drawingextension then
                 sizeY = posY + obj.Size.Y
             else
                 sizeX = posX + obj.TextBounds.X
-                sizeY = posX + obj.TextBounds.Y
+                sizeY = posY + obj.TextBounds.Y
             end
             
             if inputService:GetMouseLocation().X >= posX and inputService:GetMouseLocation().Y >= posY and inputService:GetMouseLocation().X <= sizeX and inputService:GetMouseLocation().Y <= sizeY then
