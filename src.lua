@@ -187,6 +187,7 @@ if not getgenv().drawingextension then
                 if typeof(v) == "table" then
                     table.insert(v:GetChildren(), t)
                     v.DescendantAdded:Fire(t)
+                    v.ChildAdded:Fire(t)
 
                     local highestParent = v
                     local lastHighestParent = highestParent
